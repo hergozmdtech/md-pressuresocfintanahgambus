@@ -1,0 +1,46 @@
+.titlebar-wrapper {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.titlebar-toolbar {
+  background-color: #004085;
+  color: white;
+  padding: 0.5rem 1rem;
+  position: relative;
+}
+
+.titlebar-content {
+  position: relative;
+}
+
+.title-logo-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-logo {
+  height: 32px;
+  width: auto;
+}
+
+.title-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.clock {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+
