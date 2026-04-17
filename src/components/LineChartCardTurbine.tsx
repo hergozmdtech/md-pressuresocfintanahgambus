@@ -33,7 +33,7 @@ export const LineChartCardTurbine: React.FC<Props> = ({
 }) => {
   const [dataPoints, setDataPoints] = useState<{ x: Date; y: number }[]>([]);
   const [status, setStatus] = useState("Unknown");
-  const [limitUpper, setLimitUpper] = useState(21);
+  const [limitUpper, setLimitUpper] = useState(16);
   const [limitLower, setLimitLower] = useState(0);
   const chartRef = useRef<ChartComponent | null>(null);
 
@@ -97,7 +97,7 @@ export const LineChartCardTurbine: React.FC<Props> = ({
         setStatus(mapStatus(parseInt(value)));
       }
 
-      if (tag === "tagUL") setLimitUpper(parseFloat(value));
+      // if (tag === "tagUL") setLimitUpper(parseFloat(value));
       if (tag === "tagLL") setLimitLower(parseFloat(value));
     };
 
@@ -216,8 +216,8 @@ export const LineChartCardTurbine: React.FC<Props> = ({
         }}
         primaryYAxis={{
           title: "Pressure (bar)",
-          minimum: 10,
-          maximum: 22,
+          minimum: 5,
+          maximum: 18,
           interval: 2,
           stripLines: [
             {
@@ -229,7 +229,7 @@ export const LineChartCardTurbine: React.FC<Props> = ({
               visible: true,
             },
             {
-              start: 14,
+              start: 10,
               end: limitUpper,
               color: "#00ff00",
               opacity: 0.3,

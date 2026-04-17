@@ -33,7 +33,7 @@ export const LineChartCardBPV: React.FC<Props> = ({
 }) => {
   const [dataPoints, setDataPoints] = useState<{ x: Date; y: number }[]>([]);
   const [status, setStatus] = useState("Unknown");
-  const [limitUpper, setLimitUpper] = useState(3);
+  const [limitUpper, setLimitUpper] = useState(5);
   const [limitLower, setLimitLower] = useState(0);
   const chartRef = useRef<ChartComponent | null>(null);
 
@@ -97,7 +97,7 @@ export const LineChartCardBPV: React.FC<Props> = ({
         setStatus(mapStatus(parseInt(value)));
       }
 
-      if (tag === "tagUL") setLimitUpper(parseFloat(value));
+      // if (tag === "tagUL") setLimitUpper(parseFloat(value));
       if (tag === "tagLL") setLimitLower(parseFloat(value));
     };
 
@@ -217,7 +217,7 @@ export const LineChartCardBPV: React.FC<Props> = ({
         primaryYAxis={{
           title: "Pressure (bar)",
           minimum: 0,
-          maximum: 3,
+          maximum: 5,
           interval: 0.5,
           stripLines: [
             {

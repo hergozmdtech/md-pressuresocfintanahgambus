@@ -304,11 +304,11 @@ export const LineChartCardSterilizer: React.FC<Props> = ({
         primaryYAxis={{
           title: "Pressure (bar)",
           minimum: 0,
-          maximum: 2.5,
+          maximum: 3.5,
           interval: 0.5,
           stripLines: [
             {
-              start: 2.5,
+              start: 3.5,
               end: 1000,
               text: "Over",
               color: "#ff0000",
@@ -317,7 +317,7 @@ export const LineChartCardSterilizer: React.FC<Props> = ({
             },
             {
               start: 1.5,
-              end: 2.5,
+              end: 3.5,
               text: "Cooking Area",
               color: "#00ff00",
               opacity: 0.3,

@@ -8,7 +8,7 @@ import "../styles/ChartHistoryPage.css";
 interface ChartOption {
   value: string;
   label: string;
-  type: "sterilizer" | "bpv" | "boiler" | "turbine";
+  type: "overall" | "sterilizer" | "bpv" | "boiler" | "turbine";
   props: any;
 }
 
@@ -28,7 +28,20 @@ const ChartHistoryPage: React.FC<ChartHistoryPageProps> = ({
 
   // Generate chart options
   const chartOptions: ChartOption[] = [
+    // Overall option
+    {
+      value: "all-equipment",
+      label: "Overall Chart",
+      type: "overall" as const,
+      props: {},
+    },
     // Sterilizer options
+    {
+      value: "sterilizer-all",
+      label: "All Sterilizers",
+      type: "sterilizer" as const,
+      props: {},
+    },
     ...Array.from({ length: 3 }, (_, i) => ({
       value: `sterilizer-${i + 1}`,
       label: `Sterilizer ${i + 1}`,
@@ -64,11 +77,19 @@ const ChartHistoryPage: React.FC<ChartHistoryPageProps> = ({
       type: "turbine",
       props: {
         title: "Turbine",
-        tagName: "Pressure_Turbine",
+        tagName: "Pressure_Steam_Chest_Turbine",
         tagStatus: "Status_Turbine",
       },
     },
   ];
+
+  const sterilizerConfigs = Array.from({ length: 3 }, (_, i) => ({
+    title: `Sterilizer ${i + 1}`,
+    tagName: `Pressure_Sterilizer_${i + 1}`,
+    tagStatus: `Status_Sterilizer_${i + 1}`,
+    tagHA: `HA_S${i + 1}`,
+    tagTHA: `THA_S${i + 1}`,
+  }));
 
   // Initialize with default dates
   useEffect(() => {
@@ -135,23 +156,39 @@ const ChartHistoryPage: React.FC<ChartHistoryPageProps> = ({
   const renderChart = () => {
     if (!selectedChart) return null;
 
-    // Add history params to the chart props
-    const historyProps = {
-      ...selectedChart.props,
-      historyMode: true,
-      startDate,
-      endDate,
-    };
+    const historyParams = { historyMode: true, startDate, endDate };
 
     switch (selectedChart.type) {
+      case "overall":
+        return (
+          <div className="all-equipment-charts-grid">
+            <div className="sterilizer-charts-grid">
+              {sterilizerConfigs.map((cfg) => (
+                <LineChartCardSterilizer key={cfg.tagName} {...cfg} {...historyParams} />
+              ))}
+            </div>
+            <LineChartCardBPV title="BPV" tagName="Pressure_BPV" tagStatus="Status_BPV" {...historyParams} />
+            <LineChartCardBoiler title="Boiler" tagName="Pressure_Boiler" tagStatus="Status_Boiler" {...historyParams} />
+            <LineChartCardTurbine title="Turbine" tagName="Pressure_Steam_Chest_Turbine" tagStatus="Status_Turbine" {...historyParams} />
+          </div>
+        );
       case "sterilizer":
-        return <LineChartCardSterilizer {...historyProps} />;
+        if (selectedChart.value === "sterilizer-all") {
+          return (
+            <div className="sterilizer-charts-grid">
+              {sterilizerConfigs.map((cfg) => (
+                <LineChartCardSterilizer key={cfg.tagName} {...cfg} {...historyParams} />
+              ))}
+            </div>
+          );
+        }
+        return <LineChartCardSterilizer {...selectedChart.props} {...historyParams} />;
       case "bpv":
-        return <LineChartCardBPV {...historyProps} />;
+        return <LineChartCardBPV {...selectedChart.props} {...historyParams} />;
       case "boiler":
-        return <LineChartCardBoiler {...historyProps} />;
+        return <LineChartCardBoiler {...selectedChart.props} {...historyParams} />;
       case "turbine":
-        return <LineChartCardTurbine {...historyProps} />;
+        return <LineChartCardTurbine {...selectedChart.props} {...historyParams} />;
       default:
         return null;
     }
@@ -207,6 +244,15 @@ const ChartHistoryPage: React.FC<ChartHistoryPageProps> = ({
             className="chart-select"
           >
             <option value="">-- Select a chart --</option>
+            <optgroup label="Overview">
+              {chartOptions
+                .filter((opt) => opt.type === "overall")
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </optgroup>
             <optgroup label="Sterilizers">
               {chartOptions
                 .filter((opt) => opt.type === "sterilizer")
@@ -218,13 +264,14 @@ const ChartHistoryPage: React.FC<ChartHistoryPageProps> = ({
             </optgroup>
             <optgroup label="Other Charts">
               {chartOptions
-                .filter((opt) => opt.type !== "sterilizer")
+                .filter((opt) => opt.type !== "sterilizer" && opt.type !== "overall")
                 .map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
             </optgroup>
+
           </select>
         </div>
 

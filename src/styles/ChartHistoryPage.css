@@ -136,6 +136,18 @@
   border-top: 1px solid #ccc;
 }
 
+.sterilizer-charts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.all-equipment-charts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .history-controls {
